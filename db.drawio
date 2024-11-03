@@ -1,0 +1,173 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 OPR/114.0.0.0 (Edition MSI)" version="24.8.3">
+  <diagram name="Database Diagram" id="O2YQ1C-OujuMZKy_e80Z">
+    <mxGraphModel dx="44602" dy="31101" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-1" value="Organizations" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeLast=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="320" width="180" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-2" value="Org_ID : INT (PK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-1">
+          <mxGeometry y="20" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-3" value="Name : NVARCHAR(255)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-1">
+          <mxGeometry y="40" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-4" value="Comment : NVARCHAR(MAX)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-1">
+          <mxGeometry y="60" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-5" value="Departments" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeLast=0;" vertex="1" parent="1">
+          <mxGeometry x="440" y="280" width="180" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-6" value="Dept_ID : INT (PK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-5">
+          <mxGeometry y="20" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-7" value="Org_ID : INT (FK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-5">
+          <mxGeometry y="40" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-8" value="Name : NVARCHAR(255)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-5">
+          <mxGeometry y="60" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-9" value="Parent_ID : INT (FK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-5">
+          <mxGeometry y="80" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-10" value="Comment : NVARCHAR(MAX)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-5">
+          <mxGeometry y="100" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-11" value="Positions" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeLast=0;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="300" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-12" value="Position_ID : INT (PK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-11">
+          <mxGeometry y="20" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-13" value="Name : NVARCHAR(255)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-11">
+          <mxGeometry y="40" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-14" value="Status" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeLast=0;" vertex="1" parent="1">
+          <mxGeometry x="490" y="30" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-15" value="Status_ID : INT (PK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-14">
+          <mxGeometry y="20" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-16" value="Name : NVARCHAR(50)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-14">
+          <mxGeometry y="40" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-60" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-17" target="gfmEHWsG6GsHosEBHzVl-36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-17" value="Employees" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeLast=0;" vertex="1" parent="1">
+          <mxGeometry x="730" y="-140" width="220" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-18" value="Employee_ID : INT (PK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="20" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-19" value="Last_Name : NVARCHAR(50)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="40" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-20" value="First_Name : NVARCHAR(50)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="60" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-21" value="Middle_Name : NVARCHAR(50)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="80" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-22" value="Date_of_Birth : DATE" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="100" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-23" value="Passport_Details : NVARCHAR(20)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="120" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-24" value="Passport_Issue_Date : DATE" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="140" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-25" value="Passport_Division_Code : NVARCHAR(10)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="160" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-26" value="Passport_Issued_By : NVARCHAR(255)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="180" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-27" value="Address : NVARCHAR(255)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="200" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-28" value="Salary : DECIMAL(18,2)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="220" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-29" value="Status_ID : INT (FK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-17">
+          <mxGeometry y="240" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-30" value="Passport_Scans" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeLast=0;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="-140" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-31" value="Scan_ID : INT (PK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-30">
+          <mxGeometry y="20" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-32" value="Employee_ID : INT (FK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-30">
+          <mxGeometry y="40" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-33" value="Passport_Scan : VARBINARY(MAX)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-30">
+          <mxGeometry y="60" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-34" value="HR_Operations" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeLast=0;" vertex="1" parent="1">
+          <mxGeometry x="720" y="250" width="220" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-35" value="Operation_ID : INT (PK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-34">
+          <mxGeometry y="20" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-36" value="Employee_ID : INT (FK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-34">
+          <mxGeometry y="40" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-37" value="Operation_Type : NVARCHAR(50)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-34">
+          <mxGeometry y="60" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-38" value="Dept_ID : INT (FK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-34">
+          <mxGeometry y="80" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-39" value="Position_ID : INT (FK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-34">
+          <mxGeometry y="100" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-40" value="Operation_Date : DATE" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-34">
+          <mxGeometry y="120" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-41" value="Change_History" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=20;horizontalStack=0;resizeParent=1;resizeLast=0;" vertex="1" parent="1">
+          <mxGeometry x="150" y="100" width="220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-42" value="History_ID : INT (PK)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-41">
+          <mxGeometry y="20" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-43" value="Operation_Timestamp : DATETIME" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-41">
+          <mxGeometry y="40" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-44" value="Modified_By : NVARCHAR(50)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-41">
+          <mxGeometry y="60" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-45" value="Operation_Object : NVARCHAR(50)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-41">
+          <mxGeometry y="80" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-46" value="Changed_Fields : NVARCHAR(MAX)" style="text;align=left;verticalAlign=top;" vertex="1" parent="gfmEHWsG6GsHosEBHzVl-41">
+          <mxGeometry y="100" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-47" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-1" target="gfmEHWsG6GsHosEBHzVl-5" />
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-48" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-5" target="gfmEHWsG6GsHosEBHzVl-5" />
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-49" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-14" target="gfmEHWsG6GsHosEBHzVl-17" />
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-50" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-17" target="gfmEHWsG6GsHosEBHzVl-30" />
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-51" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-17" target="gfmEHWsG6GsHosEBHzVl-34" />
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-52" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-5" target="gfmEHWsG6GsHosEBHzVl-34" />
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-53" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-11" target="gfmEHWsG6GsHosEBHzVl-34" />
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-18" target="gfmEHWsG6GsHosEBHzVl-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-12" target="gfmEHWsG6GsHosEBHzVl-39">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-58" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-6" target="gfmEHWsG6GsHosEBHzVl-38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-59" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-15" target="gfmEHWsG6GsHosEBHzVl-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gfmEHWsG6GsHosEBHzVl-61" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="gfmEHWsG6GsHosEBHzVl-2" target="gfmEHWsG6GsHosEBHzVl-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

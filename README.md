@@ -2,7 +2,7 @@
 ### Операционная система
 Windows 11 с установленным WSL2 и Docker Desktop для контейнеризации
 ### IDE 
-Visual Studio Code с расширениями для поддержки JavaScript, TypeScript, Docker, и PostgreSQL.
+Visual Studio Code
 ## Основной стек технологий
 ### Backend
 Node.js,
