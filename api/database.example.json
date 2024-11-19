@@ -1,0 +1,10 @@
+{
+    "dev": {
+      "driver": "pg",
+      "user": "YOUR_USER",
+      "password": "YOUR_PASSWORD",
+      "host": "YOUR_HOST",
+      "database": "YOUR_DATABASE"
+    }
+  }
+  
