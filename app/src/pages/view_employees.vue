@@ -14,7 +14,7 @@ export default {
   components: { EmployeesTable },
   data() {
     return {
-      employees: [], // Данные сотрудников
+      employees: [],
     };
   },
   async created() {
@@ -25,7 +25,7 @@ export default {
     async fetchEmployees() {
       try {
         const response = await api.getUsers();
-        this.employees = response.data; // Запись данных сотрудников
+        this.employees = response.data;
       } catch (error) {
         console.error('Ошибка загрузки сотрудников:', error);
       }
@@ -34,7 +34,7 @@ export default {
     async deleteEmployee(employeeId) {
       try {
         await api.deleteUser(employeeId);
-        this.fetchEmployees(); // Обновляем список после удаления
+        this.fetchEmployees();
       } catch (error) {
         console.error('Ошибка при удалении сотрудника:', error);
       }
@@ -42,12 +42,10 @@ export default {
     // Редактирование сотрудника (заглушка)
     editEmployee(employeeId) {
       alert(`Редактировать сотрудника с ID: ${employeeId}`);
-      // Добавьте реализацию открытия модального окна или перехода на страницу редактирования
+
     },
-    // Добавление нового сотрудника (заглушка)
     addEmployee() {
       alert('Добавить нового сотрудника');
-      // Добавьте реализацию открытия формы добавления сотрудника
     },
   },
 };

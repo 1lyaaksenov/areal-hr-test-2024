@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <main>
-      <!-- Рендеринг текущей страницы -->
       <router-view />
     </main>
 
@@ -18,7 +17,6 @@ export default {
 </script>
 
 <style>
-/* Базовые стили */
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
