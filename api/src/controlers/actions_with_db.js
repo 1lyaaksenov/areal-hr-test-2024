@@ -1,43 +1,50 @@
-const { pool } = require('./database');
+const { pool } = require('../db/database');
 
 const getUsers = async (req, res) => {
   try {
-    const result = await pool.query(`
+    const query = `
       SELECT 
-    e.employee_id,
-    e.last_name,
-    e.first_name,
-    e.middle_name,
-    e.date_of_birth,
-    e.passport_details,
-    e.address,
-    e.salary,
-    d.name AS department_name,
-    p.name AS position_name,
-    s.name AS status_name
-    FROM 
+        e.employee_id,
+        e.last_name,
+        e.first_name,
+        e.middle_name,
+        e.date_of_birth,
+        e.passport_details,
+        e.passport_issued_date,
+        e.address,
+        e.salary,
+        d.name AS department_name,
+        o.name AS organization_name,
+        p.name AS position_name,
+        f.file_name,
+        f.file_path
+      FROM 
         employees e
-    LEFT JOIN 
+      LEFT JOIN 
         hr_operations ho ON e.employee_id = ho.employee_id
-    LEFT JOIN 
+      LEFT JOIN 
         departments d ON ho.department_id = d.department_id
-    LEFT JOIN 
+      LEFT JOIN 
+        organizations o ON d.organization_id = o.organization_id
+      LEFT JOIN 
         positions p ON ho.position_id = p.position_id
-    LEFT JOIN 
-        status s ON e.status_id = s.status_id;
+      LEFT JOIN 
+        files f ON e.employee_id = f.employee_id;
+    `;
 
-    `);
+    const result = await pool.query(query);
 
     res.status(200).json(result.rows);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(err.message);
+    res.status(500).json({ error: 'Ошибка при выполнении запроса' });
   }
 };
 
 const getUserByFullName = async (req, res) => {
   const { lastName, firstName, middleName } = req.params;
   try {
-    const result = await pool.query(`
+    const query = `
       SELECT 
         e.employee_id,
         e.last_name,
@@ -45,38 +52,46 @@ const getUserByFullName = async (req, res) => {
         e.middle_name,
         e.date_of_birth,
         e.passport_details,
+        e.passport_issued_date,
         e.address,
         e.salary,
         d.name AS department_name,
+        o.name AS organization_name,
         p.name AS position_name,
-        s.name AS status_name
+        f.file_id,
+        f.file_name,
+        f.file_path
       FROM 
         employees e
       LEFT JOIN 
-        departments d ON e.department_id = d.department_id
+        hr_operations ho ON e.employee_id = ho.employee_id
       LEFT JOIN 
-        positions p ON e.position_id = p.position_id
+        departments d ON ho.department_id = d.department_id
       LEFT JOIN 
-        status s ON e.status_id = s.status_id
+        organizations o ON d.organization_id = o.organization_id
+      LEFT JOIN 
+        positions p ON ho.position_id = p.position_id
+      LEFT JOIN 
+        files f ON e.employee_id = f.employee_id
       WHERE 
         e.last_name = $1 
         AND e.first_name = $2 
         AND (e.middle_name = $3 OR e.middle_name IS NULL);
-    `, [lastName, firstName, middleName]);
+    `;
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Пользователь не найден' });
-    }
+    const result = await pool.query(query, [lastName, firstName, middleName]);
+
     res.status(200).json(result.rows);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(err.message);
+    res.status(500).json({ error: 'Ошибка при выполнении запроса' });
   }
 };
 
 const getUsersByPosition = async (req, res) => {
   const { positionName } = req.params;
   try {
-    const result = await pool.query(`
+    const query = `
       SELECT 
         e.employee_id,
         e.last_name,
@@ -84,32 +99,45 @@ const getUsersByPosition = async (req, res) => {
         e.middle_name,
         e.date_of_birth,
         e.passport_details,
+        e.passport_issued_date,
         e.address,
         e.salary,
         d.name AS department_name,
+        o.name AS organization_name,
         p.name AS position_name,
-        s.name AS status_name
+        f.file_id,
+        f.file_name,
+        f.file_path
       FROM 
         employees e
       LEFT JOIN 
-        positions p ON e.position_id = p.position_id
+        hr_operations ho ON e.employee_id = ho.employee_id
+      LEFT JOIN 
+        departments d ON ho.department_id = d.department_id
+      LEFT JOIN 
+        organizations o ON d.organization_id = o.organization_id
+      LEFT JOIN 
+        positions p ON ho.position_id = p.position_id
+      LEFT JOIN 
+        files f ON e.employee_id = f.employee_id
       WHERE 
         p.name = $1;
-    `, [positionName]);
+    `;
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Пользователи с указанной должностью не найдены' });
-    }
+    const result = await pool.query(query, [positionName]);
+
     res.status(200).json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  } 
+  catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: 'Ошибка при выполнении запроса' });
   }
 };
 
 const getUsersByOrganization = async (req, res) => {
   const { organizationName } = req.params;
   try {
-    const result = await pool.query(`
+    const query = `
       SELECT 
         e.employee_id,
         e.last_name,
@@ -117,51 +145,59 @@ const getUsersByOrganization = async (req, res) => {
         e.middle_name,
         e.date_of_birth,
         e.passport_details,
+        e.passport_issued_date,
         e.address,
         e.salary,
+        s.name AS status_name,
         d.name AS department_name,
         o.name AS organization_name,
         p.name AS position_name,
-        s.name AS status_name
+        f.file_id,
+        f.file_name,
+        f.file_path
       FROM 
         employees e
       LEFT JOIN 
-        departments d ON e.department_id = d.department_id
+        hr_operations ho ON e.employee_id = ho.employee_id
+      LEFT JOIN 
+        departments d ON ho.department_id = d.department_id
       LEFT JOIN 
         organizations o ON d.organization_id = o.organization_id
       LEFT JOIN 
-        positions p ON e.position_id = p.position_id
+        positions p ON ho.position_id = p.position_id
+      LEFT JOIN 
+        files f ON e.employee_id = f.employee_id
       WHERE 
         o.name = $1;
-    `, [organizationName]);
+    `;
+    const result = await pool.query(query, [organizationName]);
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Пользователи с указанной организацией не найдены' });
-    }
     res.status(200).json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  }
+  catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: 'Ошибка при выполнении запроса' });
   }
 };
 
-const updateUserStatus = async (req, res) => {
-  const { employeeId, statusId } = req.body;
-  try {
-    const result = await pool.query(`
-      UPDATE employees
-      SET status_id = $1
-      WHERE employee_id = $2
-      RETURNING employee_id;
-    `, [statusId, employeeId]);
+// const updateUserStatus = async (req, res) => {
+//   const { employeeId, statusId } = req.body;
+//   try {
+//     const result = await pool.query(`
+//       UPDATE employees
+//       SET status_id = $1
+//       WHERE employee_id = $2
+//       RETURNING employee_id;
+//     `, [statusId, employeeId]);
 
-    if (result.rowCount === 0) {
-      return res.status(404).json({ message: 'Пользователь не найден' });
-    }
-    res.status(200).json({ message: 'Статус пользователя обновлен' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+//     if (result.rowCount === 0) {
+//       return res.status(404).json({ message: 'Пользователь не найден' });
+//     }
+//     res.status(200).json({ message: 'Статус пользователя обновлен' });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
 
 const deleteUser = async (req, res) => {
   const { employeeId } = req.params;
@@ -215,7 +251,7 @@ module.exports = {
   getUserByFullName,
   getUsersByPosition,
   getUsersByOrganization,
-  updateUserStatus,
+  // updateUserStatus,
   deleteUser,
   updateUser,
 };

@@ -38,7 +38,6 @@ exports.up = (pgm) => {
         passport_issued_date: { type: 'date', notNull: true },
         address: { type: 'text', notNull: true },
         salary: { type: 'numeric(10, 2)', notNull: true },
-        status_id: { type: 'integer', notNull: true, references: 'status' },
     });
 
     //Таблица файлов
