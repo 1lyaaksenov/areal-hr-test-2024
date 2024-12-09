@@ -148,7 +148,7 @@ const getUsersByOrganization = async (req, res) => {
         e.passport_issued_date,
         e.address,
         e.salary,
-        s.name AS status_name,
+        ho.status,  -- Заменили на поле status из hr_operations
         d.name AS department_name,
         o.name AS organization_name,
         p.name AS position_name,
@@ -170,6 +170,7 @@ const getUsersByOrganization = async (req, res) => {
       WHERE 
         o.name = $1;
     `;
+
     const result = await pool.query(query, [organizationName]);
 
     res.status(200).json(result.rows);
@@ -180,38 +181,20 @@ const getUsersByOrganization = async (req, res) => {
   }
 };
 
-// const updateUserStatus = async (req, res) => {
-//   const { employeeId, statusId } = req.body;
-//   try {
-//     const result = await pool.query(`
-//       UPDATE employees
-//       SET status_id = $1
-//       WHERE employee_id = $2
-//       RETURNING employee_id;
-//     `, [statusId, employeeId]);
-
-//     if (result.rowCount === 0) {
-//       return res.status(404).json({ message: 'Пользователь не найден' });
-//     }
-//     res.status(200).json({ message: 'Статус пользователя обновлен' });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-const deleteUser = async (req, res) => {
-  const { employeeId } = req.params;
+const updateUserStatus = async (req, res) => {
+  const { employeeId, status } = req.body;
   try {
     const result = await pool.query(`
-      DELETE FROM employees
-      WHERE employee_id = $1
+      UPDATE hr_operations
+      SET status = $1
+      WHERE employee_id = $2
       RETURNING employee_id;
-    `, [employeeId]);
+    `, [status, employeeId]);
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ message: 'Пользователь не найден' });
+      return res.status(404).json({ message: 'Пользователь не найден или операция не существует' });
     }
-    res.status(200).json({ message: 'Пользователь успешно удален' });
+    res.status(200).json({ message: 'Статус пользователя обновлен' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -219,7 +202,7 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { employeeId } = req.params;
-  const { lastName, firstName, middleName, address, salary, departmentId, positionId, statusId } = req.body;
+  const { lastName, firstName, middleName, address, salary, departmentId, positionId, status } = req.body;
 
   try {
     const result = await pool.query(`
@@ -231,15 +214,26 @@ const updateUser = async (req, res) => {
         address = $4,
         salary = $5,
         department_id = $6,
-        position_id = $7,
-        status_id = $8
-      WHERE employee_id = $9
+        position_id = $7
+      WHERE employee_id = $8
       RETURNING employee_id;
-    `, [lastName, firstName, middleName, address, salary, departmentId, positionId, statusId, employeeId]);
+    `, [lastName, firstName, middleName, address, salary, departmentId, positionId, employeeId]);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ message: 'Пользователь не найден' });
     }
+
+    const statusResult = await pool.query(`
+      UPDATE hr_operations
+      SET status = $1
+      WHERE employee_id = $2
+      RETURNING employee_id;
+    `, [status, employeeId]);
+
+    if (statusResult.rowCount === 0) {
+      return res.status(404).json({ message: 'Статус для пользователя не найден' });
+    }
+
     res.status(200).json({ message: 'Данные пользователя успешно обновлены' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -251,8 +245,7 @@ module.exports = {
   getUserByFullName,
   getUsersByPosition,
   getUsersByOrganization,
-  // updateUserStatus,
-  deleteUser,
+  updateUserStatus,
   updateUser,
 };
   
