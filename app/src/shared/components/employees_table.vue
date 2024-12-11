@@ -1,19 +1,22 @@
 <template>
   <div class="employees-page">
-    <header>
-      <h1>Список сотрудников</h1>
-      <button class="add-button" @click="addEmployee">Добавить сотрудника</button>
-    </header>
-
     <table class="employees-table">
       <thead>
         <tr>
           <th>ID</th>
           <th>Фамилия</th>
           <th>Имя</th>
+          <th>Отчество</th>
           <th>Дата рождения</th>
+          <th>Паспортные данные</th>
+          <th>Дата выдачи паспорта</th>
           <th>Адрес</th>
           <th>Зарплата</th>
+          <th>Департамент</th>
+          <th>Организация</th>
+          <th>Должность</th>
+          <th>Имя файла</th>
+          <th>Фото</th>
           <th>Действия</th>
         </tr>
       </thead>
@@ -22,12 +25,22 @@
           <td>{{ employee.employee_id }}</td>
           <td>{{ employee.last_name }}</td>
           <td>{{ employee.first_name }}</td>
+          <td>{{ employee.middle_name }}</td>
           <td>{{ formatDate(employee.date_of_birth) }}</td>
+          <td>{{ employee.passport_details }}</td>
+          <td>{{ formatDate(employee.passport_issued_date) }}</td>
           <td>{{ employee.address }}</td>
           <td>{{ formatSalary(employee.salary) }}</td>
+          <td>{{ employee.department_name }}</td>
+          <td>{{ employee.organization_name }}</td>
+          <td>{{ employee.position_name }}</td>
+          <td>{{ employee.file_name }}</td>
           <td>
-            <button class="action-button edit" @click="editEmployee(employee)">Изменить</button>
-            <button class="action-button delete" @click="deleteEmployee(employee)">Уволить</button>
+            <a :href="employee.file_path" target="_blank">{{ employee.file_path }}</a>
+          </td>
+          <td>
+            <button class="action-button edit" @click="$emit('edit', employee.employee_id)">Изменить</button>
+            <button class="action-button delete" @click="$emit('delete', employee.employee_id)">Удалить</button>
           </td>
         </tr>
       </tbody>
@@ -45,6 +58,7 @@ export default {
   },
   methods: {
     formatDate(date) {
+      if (!date) return "—";
       const options = { year: "numeric", month: "2-digit", day: "2-digit" };
       return new Date(date).toLocaleDateString("ru-RU", options);
     },
@@ -53,21 +67,6 @@ export default {
         style: "currency",
         currency: "RUB",
       }).format(salary);
-    },
-    addEmployee() {
-      // Логика добавления сотрудника
-      alert("Добавить сотрудника");
-    },
-    editEmployee(employee) {
-      // Логика изменения сотрудника
-      alert(`Изменить сотрудника ID: ${employee.employee_id}`);
-    },
-    deleteEmployee(employee) {
-      // Логика удаления сотрудника
-      const confirmed = confirm(`Вы уверены, что хотите уволить сотрудника ${employee.last_name} ${employee.first_name}?`);
-      if (confirmed) {
-        alert(`Сотрудник ID: ${employee.employee_id} уволен`);
-      }
     },
   },
 };

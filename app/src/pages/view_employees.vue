@@ -1,14 +1,18 @@
 <template>
   <div>
     <h1>Сотрудники</h1>
-    <EmployeesTable :employees="employees" @delete="deleteEmployee" @edit="editEmployee" />
+    <EmployeesTable
+      :employees="employees"
+      @delete="deleteEmployee"
+      @edit="editEmployee"
+    />
     <button @click="addEmployee" class="add-button">Добавить сотрудника</button>
   </div>
 </template>
 
 <script>
-import EmployeesTable from '../components/employees_table.vue';
-import api from '../services/api.js';
+import EmployeesTable from "../shared/components/employees_table.vue";
+import api from "../services/api.js";
 
 export default {
   components: { EmployeesTable },
@@ -21,31 +25,30 @@ export default {
     this.fetchEmployees();
   },
   methods: {
-    // Получение данных сотрудников
     async fetchEmployees() {
       try {
         const response = await api.getUsers();
         this.employees = response.data;
       } catch (error) {
-        console.error('Ошибка загрузки сотрудников:', error);
+        console.error("Ошибка загрузки сотрудников:", error);
       }
     },
-    // Удаление сотрудника
     async deleteEmployee(employeeId) {
       try {
-        await api.deleteUser(employeeId);
-        this.fetchEmployees();
+        const confirmed = confirm("Вы уверены, что хотите удалить сотрудника?");
+        if (confirmed) {
+          await api.deleteUser(employeeId);
+          this.fetchEmployees();
+        }
       } catch (error) {
-        console.error('Ошибка при удалении сотрудника:', error);
+        console.error("Ошибка при удалении сотрудника:", error);
       }
     },
-    // Редактирование сотрудника (заглушка)
     editEmployee(employeeId) {
-      alert(`Редактировать сотрудника с ID: ${employeeId}`);
-
+      this.$router.push(`/edit-employee/${employeeId}`);
     },
     addEmployee() {
-      alert('Добавить нового сотрудника');
+      alert("Добавить нового сотрудника");
     },
   },
 };
