@@ -1,24 +1,44 @@
 <template>
   <div class="register-user-page">
     <h1>Добавить пользователя</h1>
-    <form @submit.prevent="submitForm">
+    <div v-if="loading" class="loading">Загрузка...</div>
+    <div v-if="error" class="error">{{ error }}</div>
+    <form v-if="!loading && !error" @submit.prevent="submitForm" class="register-user-form">
       <div class="form-group">
         <label for="login">Логин:</label>
-        <input type="text" id="login" v-model="userData.login" required />
+        <input
+          type="text"
+          id="login"
+          v-model="userData.login"
+          required
+          class="input-field"
+        />
       </div>
       <div class="form-group">
         <label for="password">Пароль:</label>
-        <input type="password" id="password" v-model="userData.password" required />
+        <input
+          type="password"
+          id="password"
+          v-model="userData.password"
+          required
+          class="input-field"
+        />
       </div>
       <div class="form-group">
         <label for="role_id">Роль:</label>
-        <select v-model="userData.role_id" required>
+        <select v-model="userData.role_id" required class="input-field">
           <option value="1">Редактор</option>
           <option value="2">Просматривающий</option>
         </select>
       </div>
       <button type="submit" class="submit-button">Добавить пользователя</button>
     </form>
+
+    <div v-if="userData.user_id" class="user-info">
+      <p>Пользователь успешно добавлен!</p>
+      <p><strong>ID пользователя:</strong> {{ userData.user_id }}</p>
+      <p><strong>Роль пользователя:</strong> {{ userData.role_id }}</p>
+    </div>
   </div>
 </template>
 
@@ -33,18 +53,26 @@ export default {
         login: "",
         password: "",
         role_id: 2,
+        user_id: null,
       },
+      loading: false,
+      error: null,
     };
   },
   methods: {
     async submitForm() {
+      this.loading = true;
       try {
-        await api.registerUser(this.userData);
+        const response = await api.registerUser(this.userData);
+        this.userData.user_id = response.user.user_id;
+        this.userData.role_id = response.user.role_id;
         alert("Пользователь успешно добавлен!");
         this.$router.push({ name: "view_employees" });
       } catch (error) {
+        this.error = "Ошибка при добавлении пользователя";
         console.error("Ошибка при добавлении пользователя:", error);
-        alert("Ошибка: не удалось добавить пользователя");
+      } finally {
+        this.loading = false;
       }
     },
   },
@@ -53,42 +81,78 @@ export default {
 
 <style scoped>
 .register-user-page {
-  padding: 2rem;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 h1 {
-  font-size: 1.8rem;
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.register-user-form {
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 15px;
 }
 
 label {
-  display: block;
-  font-size: 1rem;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #333;
 }
 
-input,
-select {
-  width: 100%;
-  padding: 0.5rem;
-  font-size: 1rem;
+.input-field {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  border: 1px solid #ddd;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .submit-button {
-  background-color: #4caf50;
+  padding: 12px;
+  background-color: #007BFF;
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
   cursor: pointer;
+  font-size: 16px;
   border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
 .submit-button:hover {
-  background-color: #45a049;
+  background-color: #0056b3;
+}
+
+.loading {
+  color: #4caf50;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.error {
+  color: #f44336;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.user-info {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #e8f5e9;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.user-info p {
+  margin: 5px 0;
 }
 </style>

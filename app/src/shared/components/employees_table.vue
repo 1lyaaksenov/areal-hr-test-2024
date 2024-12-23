@@ -47,9 +47,10 @@
       </tbody>
     </table>
 
-    <button v-if="roleId === 1" @click="addEmployee" class="add-button">Добавить сотрудника</button>
-    <br>
-    <button v-if="roleId === 1" @click="addUser" class="add-button">Добавить пользователя</button>
+    <div class="action-buttons">
+      <button v-if="roleId === 1" @click="addEmployee" class="add-button">Добавить сотрудника</button>
+      <button v-if="roleId === 1" @click="addUser" class="add-button">Добавить пользователя</button>
+    </div>
   </div>
 </template>
 
@@ -92,17 +93,15 @@ export default {
     async dismissEmployee(employee) {
       try {
         const status = 'Уволен';
-        
-        // Обновляем статус сотрудника через API
+
         const response = await api.updateEmployeeStatus({
           employeeId: employee.employee_id,
-          status,  // Устанавливаем статус "Уволен"
+          status,  
           userId: this.userId,
         });
 
-        // После успешного обновления, вызываем событие обновления на родительском компоненте
         this.$emit('update');
-        alert(response.data.message);  // Выводим сообщение о успешном обновлении
+        alert(response.data.message);
 
       } catch (error) {
         console.error("Ошибка при обновлении статуса сотрудника", error);
@@ -127,45 +126,77 @@ export default {
 <style scoped>
 .employees-page {
   padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 .employees-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+  background-color: #f9f9f9;
 }
 
 .employees-table th, .employees-table td {
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.employees-table th {
+  background-color: #f1f1f1;
+  font-weight: bold;
 }
 
 .employee-photo {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .action-button {
-  padding: 5px 10px;
+  padding: 8px 15px;
+  font-size: 14px;
   cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  margin: 0 5px;
 }
 
 .action-button.edit {
-  background-color: #ffa500;
+  background-color: #4CAF50;
   color: white;
 }
 
 .action-button.dismiss {
-  background-color: red;
+  background-color: #f44336;
   color: white;
 }
 
+.action-buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+
 .add-button {
-  padding: 10px;
-  background-color: green;
+  padding: 12px 20px;
+  background-color: #007BFF;
   color: white;
+  font-size: 16px;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s;
+}
+
+.add-button:hover {
+  background-color: #0056b3;
 }
 </style>

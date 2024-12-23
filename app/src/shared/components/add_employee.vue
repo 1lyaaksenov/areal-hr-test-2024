@@ -12,12 +12,14 @@
           :id="key"
           v-model="employeeData[key]"
           :required="field.required"
+          class="input-field"
         />
         <textarea
           v-else
           :id="key"
           v-model="employeeData[key]"
           :required="field.required"
+          class="input-field"
         ></textarea>
       </div>
       <button type="submit" class="submit-button">Добавить сотрудника</button>
@@ -102,6 +104,15 @@ export default {
 <style scoped>
 .add-employee-page {
   padding: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 .add-employee-form {
@@ -110,26 +121,53 @@ export default {
 }
 
 .form-group {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.input-field {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+textarea.input-field {
+  resize: vertical;
+  height: 100px;
 }
 
 .submit-button {
-  padding: 10px;
-  background-color: #4caf50;
+  padding: 12px;
+  background-color: #007BFF;
   color: white;
   border: none;
   cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
 .submit-button:hover {
-  background-color: #45a049;
+  background-color: #0056b3;
 }
 
 .loading {
-  color: green;
+  color: #4caf50;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .error {
-  color: red;
+  color: #f44336;
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>

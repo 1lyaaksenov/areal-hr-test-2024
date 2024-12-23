@@ -14,5 +14,5 @@ export default {
       userRoleId: parseInt(this.$route.query.userId) || 1, 
     };
   },
-};
+}; 
 </script>

@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import apiClient from '../../services/api';  // Импортируем API клиент
+import apiClient from '../../services/api'; 
 
 export default {
   data() {
@@ -48,11 +48,9 @@ export default {
         const response = await apiClient.verifyUser(this.login, this.password);
         const { userId, roleId } = response.data;
 
-        // Сохраняем userId и roleId в sessionStorage для использования на других страницах
         sessionStorage.setItem('user_id', userId);
         sessionStorage.setItem('role_id', roleId);
 
-        // Перенаправляем на страницу сотрудников
         this.$router.push({ name: 'view_employees', query: { userId, roleId } });
       } catch (error) {
         this.errorMessage = error.response?.data?.error || 'Ошибка авторизации';
@@ -63,19 +61,70 @@ export default {
 </script>
 
 <style scoped>
-
 .login-container {
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  background-color: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
+h2 {
+  text-align: center;
+  color: #1e3a8a;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
 .form-group {
   margin-bottom: 1em;
 }
+
+label {
+  display: block;
+  color: #1e3a8a;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #1e3a8a;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #1e3a8a;
+  background-color: #ffffff;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+input:focus {
+  border-color: #0c2c68;
+  outline: none;
+}
+
+button.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px;
+}
+
+button.btn:hover {
+  background-color: #0c2c68;
+}
+
 .error-message {
-  color: red;
+  color: #d32f2f;
   font-size: 0.9em;
+  text-align: center;
+  margin-top: 10px;
 }
 </style>
