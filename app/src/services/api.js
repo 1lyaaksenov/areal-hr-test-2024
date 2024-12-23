@@ -1,46 +1,62 @@
-import axios from 'axios';
+  import axios from 'axios'; 
 
-// Настройка базового клиента API
-const apiClient = axios.create({
-  baseURL: 'http://localhost:3000/api', // Убедитесь, что порт и адрес совпадают с вашим сервером
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+  const apiClient = axios.create({
+    baseURL: 'http://localhost:3000/api', 
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
-export default {
-  // Получить список всех сотрудников
-  getUsers() {
-    return apiClient.get('/users');
-  },
+  export default {
+    // Получить список всех сотрудников
+    getEmployees() {
+      return apiClient.get('/employees');
+    },
 
-  // Получить сотрудника по ФИО
-  getUserByFullName(lastName, firstName, middleName) {
-    return apiClient.get(`/users/fullname/${lastName}/${firstName}/${middleName}`);
-  },
+    // Получить сотрудника по ФИО
+    getEmployeeByFullName(lastName, firstName, middleName) {
+      return apiClient.get(`/employees/fullname/${lastName}/${firstName}/${middleName}`);
+    },
 
-  // Получить сотрудников по должности
-  getUsersByPosition(positionName) {
-    return apiClient.get(`/users/position/${positionName}`);
-  },
+    // Получить сотрудников по должности
+    getEmployeesByPosition(positionName) {
+      return apiClient.get(`/employees/position/${positionName}`);
+    },
 
-  // Получить сотрудников по организации
-  getUsersByOrganization(organizationName) {
-    return apiClient.get(`/users/organization/${organizationName}`);
-  },
+    // Получить сотрудников по организации
+    getEmployeesByOrganization(organizationName) {
+      return apiClient.get(`/employees/organization/${organizationName}`);
+    },
 
-  // Обновить статус сотрудника
-  updateUserStatus(employeeId, status) {
-    return apiClient.put(`/users/status`, { employeeId, status });
-  },
+    updateEmployeeStatus({ employeeId, status, userId }) {
+      return apiClient.put('/employees/status', { employeeId, status, userId});
+    },
 
-  // Удалить сотрудника
-  deleteUser(employeeId) {
-    return apiClient.delete(`/users/${employeeId}`);
-  },
+    // Удалить сотрудника
+    deleteEmployee(employeeId) {
+      return apiClient.delete(`/employees/${employeeId}`);
+    },
 
-  // Обновить данные сотрудника
-  updateUser(employeeId, data) {
-    return apiClient.put(`/users/${employeeId}`, data);
-  },
-};
+    // Обновить данные сотрудника
+    updateEmployee(employeeId, data) {
+      return apiClient.put(`/employees/${employeeId}`, data);
+    },
+
+    // Проверка логина и пароля
+    verifyUser(login, password) {
+      return apiClient.post('/user/verify', { login, password });
+    },
+
+    // Получить сотрудника по ID
+    getEmployee(employeeId) {
+      return apiClient.get(`/employee/${employeeId}`);
+    },
+    
+    addEmployee(employeeData) {
+      return apiClient.post('/employees', employeeData);
+    },
+
+    registerUser(userData){
+      return apiClient.post('/user', userData);
+    }
+  };

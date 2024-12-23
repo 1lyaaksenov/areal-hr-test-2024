@@ -1,5 +1,8 @@
 <template>
   <div class="employees-page">
+    <header>
+      <h1>Сотрудники</h1>
+    </header>
     <table class="employees-table">
       <thead>
         <tr>
@@ -15,9 +18,8 @@
           <th>Департамент</th>
           <th>Организация</th>
           <th>Должность</th>
-          <th>Имя файла</th>
           <th>Фото</th>
-          <th>Действия</th>
+          <th v-if="roleId === 1">Действия</th>
         </tr>
       </thead>
       <tbody>
@@ -34,122 +36,136 @@
           <td>{{ employee.department_name }}</td>
           <td>{{ employee.organization_name }}</td>
           <td>{{ employee.position_name }}</td>
-          <td>{{ employee.file_name }}</td>
           <td>
-            <a :href="employee.file_path" target="_blank">{{ employee.file_path }}</a>
+            <img :src="employee.file_path" alt="Фото сотрудника" class="employee-photo" />
           </td>
-          <td>
-            <button class="action-button edit" @click="$emit('edit', employee.employee_id)">Изменить</button>
-            <button class="action-button delete" @click="$emit('delete', employee.employee_id)">Удалить</button>
+          <td v-if="roleId === 1">
+            <button class="action-button edit" @click="editEmployee(employee.employee_id, userId)">Изменить</button>
+            <button class="action-button dismiss" @click="dismissEmployee(employee)">Уволить</button>
           </td>
         </tr>
       </tbody>
     </table>
+
+    <button v-if="roleId === 1" @click="addEmployee" class="add-button">Добавить сотрудника</button>
+    <br>
+    <button v-if="roleId === 1" @click="addUser" class="add-button">Добавить пользователя</button>
   </div>
 </template>
 
 <script>
+import api from '../../services/api';
+
 export default {
+  name: 'EmployeeTable',
   props: {
+    roleId: {
+      type: Number,
+      required: true,
+    },
+    userId: {
+      type: Number,
+      required: true,
+    },
     employees: {
       type: Array,
       required: true,
-    },
+    }
   },
   methods: {
     formatDate(date) {
-      if (!date) return "—";
-      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-      return new Date(date).toLocaleDateString("ru-RU", options);
+      return new Date(date).toLocaleDateString();
     },
+
     formatSalary(salary) {
-      return new Intl.NumberFormat("ru-RU", {
-        style: "currency",
-        currency: "RUB",
-      }).format(salary);
+      return new Intl.NumberFormat('ru-RU').format(salary) + ' руб.';
+    },
+
+    editEmployee(employeeId, userId) {
+      this.$router.push({
+        name: 'editEmployee',
+        params: { id: employeeId },
+        query: { userId: userId }
+      });
+    },
+
+    async dismissEmployee(employee) {
+      try {
+        const status = 'Уволен';
+        
+        // Обновляем статус сотрудника через API
+        const response = await api.updateEmployeeStatus({
+          employeeId: employee.employee_id,
+          status,  // Устанавливаем статус "Уволен"
+          userId: this.userId,
+        });
+
+        // После успешного обновления, вызываем событие обновления на родительском компоненте
+        this.$emit('update');
+        alert(response.data.message);  // Выводим сообщение о успешном обновлении
+
+      } catch (error) {
+        console.error("Ошибка при обновлении статуса сотрудника", error);
+        alert("Произошла ошибка при обновлении статуса сотрудника");
+      }
+    },
+
+    addEmployee() {
+      this.$router.push({
+        name: 'add_employee_page',
+        query: { userId: this.userId },
+      });
+    },
+
+    addUser() {
+      this.$router.push({ name: 'addUser' });
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .employees-page {
-  padding: 2rem;
-  font-family: Arial, sans-serif;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-header h1 {
-  font-size: 1.8rem;
-}
-
-.add-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.add-button:hover {
-  background-color: #45a049;
+  padding: 20px;
 }
 
 .employees-table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
-.employees-table th,
-.employees-table td {
-  border: 1px solid #ddd;
-  padding: 0.8rem;
-  text-align: left;
+.employees-table th, .employees-table td {
+  padding: 10px;
+  border: 1px solid #ccc;
 }
 
-.employees-table th {
-  background-color: #f4f4f4;
-}
-
-.employees-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.employees-table tr:hover {
-  background-color: #f1f1f1;
+.employee-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
 .action-button {
-  padding: 0.3rem 0.6rem;
-  font-size: 0.9rem;
-  border: none;
-  border-radius: 5px;
+  padding: 5px 10px;
   cursor: pointer;
 }
 
 .action-button.edit {
-  background-color: #2196F3;
+  background-color: #ffa500;
   color: white;
 }
 
-.action-button.edit:hover {
-  background-color: #0b7dda;
-}
-
-.action-button.delete {
-  background-color: #f44336;
+.action-button.dismiss {
+  background-color: red;
   color: white;
 }
 
-.action-button.delete:hover {
-  background-color: #da190b;
+.add-button {
+  padding: 10px;
+  background-color: green;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 </style>

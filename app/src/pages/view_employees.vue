@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>Сотрудники</h1>
     <EmployeesTable
       :employees="employees"
-      @delete="deleteEmployee"
+      :roleId="userRoleId"
+      @dismiss="markAsDismissed"
       @edit="editEmployee"
+      :userId="userId"
     />
-    <button @click="addEmployee" class="add-button">Добавить сотрудника</button>
   </div>
 </template>
 
@@ -19,36 +19,41 @@ export default {
   data() {
     return {
       employees: [],
+      userRoleId: null,
+      userId: null,  
     };
   },
   async created() {
+    this.userRoleId = parseInt(this.$route.query.roleId) || 1; 
+    this.userId = parseInt(this.$route.query.userId) || 1;
     this.fetchEmployees();
   },
   methods: {
     async fetchEmployees() {
       try {
-        const response = await api.getUsers();
+        const response = await api.getEmployees();
         this.employees = response.data;
       } catch (error) {
         console.error("Ошибка загрузки сотрудников:", error);
       }
     },
-    async deleteEmployee(employeeId) {
+    async markAsDismissed(employee) {
       try {
-        const confirmed = confirm("Вы уверены, что хотите удалить сотрудника?");
+        const confirmed = confirm("Вы уверены, что хотите уволить сотрудника?");
         if (confirmed) {
-          await api.deleteUser(employeeId);
-          this.fetchEmployees();
+          await api.updateEmployeeStatus(employee.employee_id, "Уволен", this.userRoleId);
+          window.location.reload();
         }
       } catch (error) {
-        console.error("Ошибка при удалении сотрудника:", error);
+        console.error("Ошибка при изменении статуса сотрудника:", error);
+        alert("Не удалось изменить статус сотрудника");
       }
     },
     editEmployee(employeeId) {
-      this.$router.push(`/edit-employee/${employeeId}`);
-    },
-    addEmployee() {
-      alert("Добавить нового сотрудника");
+      this.$router.push({
+        path: `/edit-employee/${employeeId}`,
+        query: { userId: this.userId }, 
+      });
     },
   },
 };

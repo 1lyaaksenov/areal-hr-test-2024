@@ -1,9 +1,9 @@
 <template>
-  <div class="employee-update-page">
-    <h1>Обновить данные сотрудника</h1>
+  <div class="add-employee-page">
+    <h1>Добавить сотрудника</h1>
     <div v-if="loading" class="loading">Загрузка...</div>
     <div v-if="error" class="error">{{ error }}</div>
-    <form v-if="!loading && !error" @submit.prevent="handleSubmit" class="update-form">
+    <form v-if="!loading && !error" @submit.prevent="handleSubmit" class="add-employee-form">
       <div class="form-group" v-for="(field, key) in formFields" :key="key">
         <label :for="key">{{ field.label }}:</label>
         <input
@@ -20,7 +20,7 @@
           :required="field.required"
         ></textarea>
       </div>
-      <button type="submit" class="submit-button">Обновить данные</button>
+      <button type="submit" class="submit-button">Добавить сотрудника</button>
     </form>
   </div>
 </template>
@@ -29,10 +29,37 @@
 import api from '../../services/api';
 
 export default {
-  name: 'EmployeeUpdate',
+  name: 'AddEmployeePage',
+  props: {
+    userId: {
+      type: Number,
+      required: true,
+    },
+    roleId: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
-      employeeData: {},
+      employeeData: {
+        last_name: '',
+        first_name: '',
+        middle_name: '',
+        date_of_birth: '',
+        passport_details: '',
+        passport_issued_date: '',
+        address: '',
+        salary: '',
+        status_name: '',
+        department_name: '',
+        organization_name: '',
+        position_name: '',
+        file_name: '',
+        file_path: '',
+      },
+      loading: false,
+      error: null,
       formFields: {
         last_name: { label: 'Фамилия', type: 'text', required: true },
         first_name: { label: 'Имя', type: 'text', required: true },
@@ -42,87 +69,67 @@ export default {
         passport_issued_date: { label: 'Дата выдачи паспорта', type: 'date', required: true },
         address: { label: 'Адрес', type: 'text', required: true },
         salary: { label: 'Зарплата', type: 'number', required: true },
+        status_name: { label: 'Статус', type: 'text', required: true },
         department_name: { label: 'Департамент', type: 'text', required: true },
         organization_name: { label: 'Организация', type: 'text', required: true },
         position_name: { label: 'Должность', type: 'text', required: true },
+        file_name: { label: 'Имя файла', type: 'text', required: true },
+        file_path: { label: 'Путь к файлу', type: 'text', required: true },
       },
-      loading: true,
-      error: '',
     };
   },
-  mounted() {
-    this.fetchEmployeeData();
-  },
   methods: {
-    async fetchEmployeeData() {
+    async handleSubmit() {
+      this.loading = true;
       try {
-        const employeeId = this.$route.params.id;
-        const response = await api.getEmployee(employeeId);
-        this.employeeData = response.data;
-        this.loading = false;
+        const { userId } = this.$route.query;
+        await api.addEmployee({ ...this.employeeData, userId });
+        this.$router.push({
+          name: 'view_employees',
+          query: { userId, roleId: this.roleId },
+        });
       } catch (error) {
-        this.error = 'Ошибка загрузки данных сотрудника';
+        this.error = 'Ошибка при добавлении сотрудника';
+        console.error(error);
+      } finally {
         this.loading = false;
       }
     },
-
-    async handleSubmit() {
-  try {
-    this.employeeData.status_name = 'Работает';
-    
-    const employeeId = this.$route.params.id;
-    const userId = this.$route.query.userId; 
-
-    if (!userId) {
-      this.error = 'Ошибка: не найден userId';
-      return;
-    }
-
-    await api.updateEmployee(employeeId, { ...this.employeeData, userId });
-
-    this.$router.push({ name: 'view_employees', query: { userId: this.$route.query.userId } });
-  } catch (error) {
-    this.error = 'Ошибка при обновлении данных';
-  }
-},
-
   },
 };
 </script>
 
-
 <style scoped>
-.employee-update-page {
+.add-employee-page {
   padding: 20px;
 }
 
-.update-form {
-  max-width: 600px;
-  margin: 0 auto;
+.add-employee-form {
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .submit-button {
-  padding: 10px 20px;
-  background-color: #007bff;
+  padding: 10px;
+  background-color: #4caf50;
   color: white;
   border: none;
   cursor: pointer;
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #45a049;
+}
+
+.loading {
+  color: green;
 }
 
 .error {
   color: red;
-}
-
-.loading {
-  font-size: 18px;
-  color: #666;
 }
 </style>

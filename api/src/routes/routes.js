@@ -1,21 +1,27 @@
 const express = require('express');
 const userController = require('../controlers/actions_with_db');
 
-const router = express.Router();
+const router = express.Router();  
 
-// Получить всех пользователей
-router.get('/users', userController.getEmployees);
-// Получить пользователя по ФИО
-router.get('/users/fullname/:lastName/:firstName/:middleName', userController.getEmployeeByFullName);
-// Получить пользователей по должности
-router.get('/users/position/:positionName', userController.getEmployeesByPosition);
-// Получить пользователей по организации
-router.get('/users/organization/:organizationName', userController.getEmployeesByOrganization);
+// Получить всех сотрудников
+router.get('/employees', userController.getEmployees);
+// Получить сотрудника по ФИО
+router.get('/employees/fullname/:lastName/:firstName/:middleName', userController.getEmployeeByFullName);
+// Получить сотрудников по должности
+router.get('/employees/position/:positionName', userController.getEmployeesByPosition);
+// Получить сотрудников по организации
+router.get('/employees/organization/:organizationName', userController.getEmployeesByOrganization);
+// Получить сотрудника по ID
+router.get('/employee/:employeeId', userController.getEmployee);
 // Проверка логина и пароля
-router.post('/users/verify', userController.verifyUser);
-// Обновить данные пользователя
-router.put('/users/:employeeId', userController.updateEmployee);
+router.post('/user/verify', userController.verifyUser);
 // Обновить статус сотрудника
-router.put('/users/status', userController.updateEmployeeStatus);
+router.put('/employees/status', userController.updateEmployeeStatus);
+// Обновить данные сотрудника
+router.put('/employees/:employeeId', userController.updateEmployee);
+// Добавление сотрудника
+router.post('/add-employee', userController.upload.single('file'), userController.addEmployee);
+// Добавление пользователя 
+router.post('/user', userController.registerUser)   
 
 module.exports = router;
