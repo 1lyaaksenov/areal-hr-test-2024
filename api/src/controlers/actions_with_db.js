@@ -1,6 +1,5 @@
 const { pool } = require('../db/database');
 const multer = require('multer');
-const path = require('path');
 const argon2 = require('argon2');
 
 // Проверка логина и пароля пользователя
@@ -39,7 +38,7 @@ const getEmployee = async (req, res) => {
   try {
       const { employeeId } = req.params;
       const query = `
-          SELECT 
+          SELECT DISTINCT 
               e.employee_id,
               e.last_name,
               e.first_name,
@@ -66,7 +65,8 @@ const getEmployee = async (req, res) => {
               positions p ON ho.position_id = p.position_id
           LEFT JOIN 
               files f ON e.employee_id = f.employee_id
-          WHERE e.employee_id = $1;
+          WHERE 
+              e.employee_id = $1;
       `;
 
       const result = await pool.query(query, [employeeId]); 
@@ -85,7 +85,7 @@ const getEmployee = async (req, res) => {
 const getEmployees = async (req, res) => {
   try {
       const query = `
-          SELECT 
+          SELECT DISTINCT
               e.employee_id,
               e.last_name,
               e.first_name,
@@ -147,7 +147,7 @@ const getEmployeeByFullName = async (req, res) => {
   const { lastName, firstName, middleName } = req.params;
   try {
     const query = `
-      SELECT 
+      SELECT DISTINCT
         e.employee_id,
         e.last_name,
         e.first_name,
@@ -194,7 +194,7 @@ const getEmployeesByPosition = async (req, res) => {
   const { positionName } = req.params;
   try {
     const query = `
-      SELECT 
+      SELECT DISTINCT
         e.employee_id,
         e.last_name,
         e.first_name,
@@ -250,7 +250,7 @@ const getEmployeesByOrganization = async (req, res) => {
         e.passport_issued_date,
         e.address,
         e.salary,
-        ho.status,  -- Заменили на поле status из hr_operations
+        ho.status,
         d.name AS department_name,
         o.name AS organization_name,
         p.name AS position_name,
@@ -320,7 +320,7 @@ const updateEmployee = async (req, res) => {
     passport_issued_date,
     address,
     salary,
-    status_name,
+    status_name='Работает',
     department_name,
     organization_name,
     position_name,
@@ -427,15 +427,14 @@ const updateEmployee = async (req, res) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../../../../files'));
+    cb(null, '../../../../files/');
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname)); 
+    cb(null, Date.now() + '-' + file.originalname);
   },
 });
 
-const upload = multer({ storage }).single('file');
+const upload = multer({ storage });
 
 const addEmployee = async (req, res) => {
   const {
@@ -510,6 +509,10 @@ const addEmployee = async (req, res) => {
 };
 
 const getOrCreateOrganization = async (organization_name) => {
+  if (!organization_name || typeof organization_name !== 'string') {
+    throw new Error('Название организации должно быть непустой строкой');
+  }
+
   const result = await pool.query(
     `SELECT organization_id FROM organizations WHERE name = $1`,
     [organization_name]
@@ -575,10 +578,10 @@ const registerUser = async (req, res) => {
       const hashedPassword = await argon2.hash(password, { type: argon2.argon2id });
 
       const result = await pool.query(`
-          INSERT INTO users (login, password, role_id, last_name, first_name, middle_name)
+          INSERT INTO users (last_name, first_name, middle_name, login, password, role_id)
           VALUES ($1, $2, $3, $4, $5, $6)
           RETURNING user_id, role_id;
-      `, [login, hashedPassword, roleId, lastName, firstName, middleName]);
+      `, [lastName, firstName, middleName, login, hashedPassword, roleId]);
 
       const newUser = result.rows[0];
       res.status(201).json({
@@ -595,6 +598,31 @@ const registerUser = async (req, res) => {
   }
 };
 
+const getChangeHistory = async (req, res) => {
+  try {
+      const query = `
+          SELECT 
+              history_id,
+              operation_timestamp,
+              operation_object,
+              change_fields,
+              user_id
+          FROM 
+              change_history
+          ORDER BY 
+              operation_timestamp DESC;
+      `;
+
+      const result = await pool.query(query);
+
+      res.status(200).json(result.rows);
+  } catch (err) {
+      console.error('Ошибка при выполнении запроса истории изменений:', err.message);
+      res.status(500).json({ error: 'Ошибка при выполнении запроса' });
+  }
+};
+
+
 module.exports = {
   getEmployees,
   getEmployeeByFullName,
@@ -607,5 +635,6 @@ module.exports = {
   getEmployee,
   addEmployee,
   upload,
+  getChangeHistory,
 };
   

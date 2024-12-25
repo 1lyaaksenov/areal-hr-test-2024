@@ -18,10 +18,12 @@ router.post('/user/verify', userController.verifyUser);
 // Обновить статус сотрудника
 router.put('/employees/status', userController.updateEmployeeStatus);
 // Обновить данные сотрудника
-router.put('/employees/:employeeId', userController.updateEmployee);
+router.put('/employees/:employeeId', userController.upload.single('file'), userController.updateEmployee);
 // Добавление сотрудника
-router.post('/add-employee', userController.upload.single('file'), userController.addEmployee);
+router.post('/addemployee', userController.upload.single('file'), userController.addEmployee);
 // Добавление пользователя 
 router.post('/user', userController.registerUser)   
+// Вывод истории изменений
+router.get('/history', userController.getChangeHistory)
 
 module.exports = router;
